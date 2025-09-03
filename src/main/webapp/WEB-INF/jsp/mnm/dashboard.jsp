@@ -47,26 +47,35 @@
     $(function() {
         const $spinner = $('#globalSpinner');
         $spinner.show();
-        // Static placeholder data for initial skeleton
-        new Chart(document.getElementById('statusChart'), {
-            type: 'pie',
-            data: { labels: ['대기','진행','완료'], datasets: [{ data: [5,3,7], backgroundColor: ['#ffc107','#0d6efd','#198754'] }] },
-            options: { plugins: { legend: { position: 'bottom' } } }
-        });
-        $('#statusTotal').text('총 15건');
 
-        new Chart(document.getElementById('monthlyChart'), {
-            type: 'line',
-            data: { labels: ['1','2','3','4','5','6'], datasets: [{ label:'등록', data: [1,2,3,4,3,5], borderColor:'#0d6efd', fill:false }] },
-            options: { plugins: { legend: { display: false } } }
+        function toChartData(rows) {
+            return {
+                labels: rows.map(r => r.label),
+                datasets: [{ data: rows.map(r => r.value), backgroundColor: ['#ffc107','#0d6efd','#198754','#6610f2','#20c997','#fd7e14'] }]
+            };
+        }
+
+        $.getJSON('<c:url value="/api/charts/status"/>', function(res){
+            const total = res.rows.reduce((a,b)=>a + (Number(b.value)||0), 0);
+            new Chart(document.getElementById('statusChart'), {
+                type: 'pie', data: toChartData(res.rows), options: { plugins: { legend: { position: 'bottom' } } }
+            });
+            $('#statusTotal').text(`총 ${total}건`);
+        }).always(()=> $spinner.hide());
+
+        $.getJSON('<c:url value="/api/charts/monthly"/>', function(res){
+            new Chart(document.getElementById('monthlyChart'), {
+                type: 'line', data: { labels: res.rows.map(r=>r.label), datasets: [{ label:'등록', data: res.rows.map(r=>r.value), borderColor:'#0d6efd', fill:false }] },
+                options: { plugins: { legend: { display: false } } }
+            });
         });
 
-        new Chart(document.getElementById('userChart'), {
-            type: 'bar',
-            data: { labels: ['user1','user2','user3'], datasets: [{ label:'등록 수', data: [3,5,2], backgroundColor: '#20c997' }] },
-            options: { plugins: { legend: { display: false } } }
+        $.getJSON('<c:url value="/api/charts/users"/>', function(res){
+            new Chart(document.getElementById('userChart'), {
+                type: 'bar', data: { labels: res.rows.map(r=>r.label), datasets: [{ label:'등록 수', data: res.rows.map(r=>r.value), backgroundColor: '#20c997' }] },
+                options: { plugins: { legend: { display: false } } }
+            });
         });
-        $spinner.hide();
     });
 </script>
 
