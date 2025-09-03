@@ -1,0 +1,81 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+⸻
+
+1. 아키텍처 / 계층 구조
+	•	Controller → Service → DAO → Mapper → DB
+	•	각 레이어는 반드시 단일 책임 원칙(SRP)을 따른다.
+	•	Controller
+	•	요청 파라미터 검증
+	•	View 반환(JSP) 또는 JSON 응답
+	•	Service
+	•	비즈니스 로직 담당
+	•	트랜잭션 단위 처리
+	•	DAO
+	•	DB 접근 전용 클래스
+	•	Mapper
+	•	MyBatis XML 파일에서 SQL 정의
+
+⸻
+
+2. 패키지 구조
+```
+egovframework.example.mnm
+ ├─ controller
+ ├─ service
+ ├─ service.impl
+ ├─ dao
+ ├─ vo
+ ```
+⸻
+
+3. 네이밍 규칙
+	•	Controller: [도메인]Controller → MnmController
+	•	Service: [도메인]Service → MnmService
+	•	ServiceImpl: [도메인]ServiceImpl
+	•	DAO: [도메인]DAO
+	•	VO: [도메인]VO
+	•	Mapper XML: [도메인]Mapper.xml
+
+메서드 네이밍 예시:
+	•	조회: selectMnmList, selectMnmById
+	•	등록: insertMnm
+	•	수정: updateMnm
+	•	삭제: deleteMnm
+
+⸻
+
+4. JSP / Frontend 규칙
+	•	JSP 파일 경로: /WEB-INF/jsp/[도메인]/[기능].jsp
+	•	JSTL 활용 (<c:forEach>, <c:if>)
+	•	CSS는 Bootstrap 활용, 추가 CSS는 custom.css에 작성
+	•	JavaScript:
+	•	공통 기능: /js/common.js
+	•	페이지별 기능: JSP 내 script tag 또는 /js/[도메인].js
+	•	Ajax 호출은 반드시 JSON 기반 (contentType: "application/json")
+
+⸻
+
+5. UI/UX 규칙
+	•	Bootstrap 5
+	•	레이아웃: Grid System
+	•	컴포넌트: Modal, Card, Table, Toast 활용
+	•	Chart.js
+	•	Ajax로 가져온 JSON 데이터 기반 렌더링
+	•	초기 로딩 시 로딩 스피너 표시
+	•	jQuery
+	•	DOM 조작, Validation, Ajax 요청에만 사용
+	•	document.ready() 내부에 함수 정의
+
+⸻
+
+6. 커밋 규칙
+	•	feat: [기능] → 새로운 기능 추가
+	•	fix: [버그] → 버그 수정
+	•	refactor: [코드영역] → 코드 리팩토링
+	•	style: [UI영역] → 스타일/UI 수정
+	•	docs: [문서명] → 문서 작업

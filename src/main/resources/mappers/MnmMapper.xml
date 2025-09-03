@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.mnm.dao.MnmDAO">
+    <resultMap id="MnmMap" type="egovframework.example.mnm.vo.MnmVO">
+        <id column="mnm_id" property="mnmId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="status" property="status" />
+        <result column="reg_user" property="regUser" />
+        <result column="reg_date" property="regDate" />
+        <result column="upd_date" property="updDate" />
+    </resultMap>
+
+    <sql id="MnmSelect">
+        SELECT mnm_id, title, content, status, reg_user, reg_date, upd_date
+        FROM tb_mnm
+    </sql>
+
+    <select id="selectMnmList" resultMap="MnmMap">
+        <include refid="MnmSelect"/>
+        <where>
+            <if test="title != null">AND title LIKE #{title}</if>
+            <if test="status != null">AND status = #{status}</if>
+        </where>
+        ORDER BY mnm_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countMnm" resultType="int">
+        SELECT COUNT(*) FROM tb_mnm
+        <where>
+            <if test="title != null">AND title LIKE #{title}</if>
+            <if test="status != null">AND status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectMnmById" resultMap="MnmMap">
+        <include refid="MnmSelect"/>
+        WHERE mnm_id = #{mnmId}
+    </select>
+
+    <insert id="insertMnm" parameterType="egovframework.example.mnm.vo.MnmVO" useGeneratedKeys="true" keyProperty="mnmId">
+        INSERT INTO tb_mnm (title, content, status, reg_user, reg_date, upd_date)
+        VALUES (#{title}, #{content}, #{status}, #{regUser}, NOW(), NOW())
+    </insert>
+
+    <update id="updateMnm" parameterType="egovframework.example.mnm.vo.MnmVO">
+        UPDATE tb_mnm
+        SET title = #{title},
+            content = #{content},
+            status = #{status},
+            upd_date = NOW()
+        WHERE mnm_id = #{mnmId}
+    </update>
+
+    <delete id="deleteMnm">
+        DELETE FROM tb_mnm WHERE mnm_id = #{mnmId}
+    </delete>
+
+    <!-- Stats -->
+    <select id="countByStatus" resultType="map">
+        SELECT status AS label, COUNT(*) AS value
+        FROM tb_mnm
+        GROUP BY status
+    </select>
+
+    <select id="monthlyCounts" resultType="map">
+        SELECT DATE_FORMAT(reg_date, '%m') AS label, COUNT(*) AS value
+        FROM tb_mnm
+        WHERE YEAR(reg_date) = #{year}
+        GROUP BY DATE_FORMAT(reg_date, '%m')
+        ORDER BY label
+    </select>
+
+    <select id="countByUser" resultType="map">
+        SELECT reg_user AS label, COUNT(*) AS value
+        FROM tb_mnm
+        GROUP BY reg_user
+        ORDER BY value DESC
+        LIMIT 10
+    </select>
+</mapper>
+
+
