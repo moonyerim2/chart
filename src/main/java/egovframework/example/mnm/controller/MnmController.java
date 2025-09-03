@@ -20,7 +20,11 @@ public class MnmController {
         return "mnm/dashboard";
     }
 
-    
+    @GetMapping("/mnm")
+    public String list(Model model) {
+        model.addAttribute("pageTitle", "민원 목록");
+        return "mnm/list";
+    }
 }
 
 

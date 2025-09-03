@@ -19,7 +19,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="<c:url value='/dashboard'/>">대시보드</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">민원 관리</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value='/mnm'/>">민원 관리</a></li>
             </ul>
         </div>
     </div>
