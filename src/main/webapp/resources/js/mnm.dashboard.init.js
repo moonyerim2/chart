@@ -1,51 +1,56 @@
-(function waitForDeps(){
-    if (!window.jQuery || !window.Chart || !window.MnmDashboardApi || !window.MnmDashboardCharts) { setTimeout(waitForDeps, 50); return; }
+(function waitForDeps() {
+    if (!window.jQuery || !window.Chart || !window.MnmDashboardApi || !window.MnmDashboardCharts) {
+        setTimeout(waitForDeps, 50);
+        return;
+    }
     jQuery(function($) {
-        var $spinner = $('#globalSpinner');
-        if ($spinner.length) { $spinner.show(); }
+        const $spinner = $('#globalSpinner');
+        if ($spinner.length) {
+            $spinner.show();
+        }
 
-        MnmDashboardApi.fetchStatus().done(function(res){
-            var rows = res.rows || [];
-            var total = rows.reduce(function(a,b){ return a + (Number(b.value)||0); }, 0);
+        MnmDashboardApi.fetchStatus().done(res => {
+            const rows = res.rows || [];
+            const total = rows.reduce((a, b) => a + (Number(b.value) || 0), 0);
             MnmDashboardCharts.renderStatus('statusChart', rows);
-            $('#statusTotal').text('총 ' + total + '건');
-        }).always(function(){ if ($spinner.length) { $spinner.hide(); } });
+            $('#statusTotal').text(`총 ${total}건`);
+        }).always(() => { if ($spinner.length) { $spinner.hide(); } });
 
-        MnmDashboardApi.fetchMonthly().done(function(res){
+        MnmDashboardApi.fetchMonthly().done(res => {
             MnmDashboardCharts.renderMonthly('monthlyChart', res.rows || []);
         });
 
-        MnmDashboardApi.fetchUsers().done(function(res){
+        MnmDashboardApi.fetchUsers().done(res => {
             MnmDashboardCharts.renderUsers('userChart', res.rows || []);
         });
 
-        MnmDashboardApi.fetchResolutionRate().done(function(res){
-            var total = Number(res.total) || 0;
-            var completed = Number(res.completed) || 0;
-            var percentage = (total > 0) ? (completed / total * 100) : 0;
+        MnmDashboardApi.fetchResolutionRate().done(res => {
+            const total = Number(res.total) || 0;
+            const completed = Number(res.completed) || 0;
+            const percentage = (total > 0) ? (completed / total * 100) : 0;
             MnmDashboardCharts.renderResolutionRate('resolutionRateChart', total, completed);
-            $('#resolutionRateText').text(percentage.toFixed(1) + '%');
+            $('#resolutionRateText').text(`${percentage.toFixed(1)}%`);
         });
 
         // 월별 평균 처리시간(분) - 연도 선택 및 로딩
-        var currentYear = new Date().getFullYear();
-        var $year = $('#avgYearSelect');
+        const currentYear = new Date().getFullYear();
+        const $year = $('#avgYearSelect');
         if ($year.length) {
-            var years = Array.from({ length: 5 }, function(_, i){ return currentYear - i; });
-            years.forEach(function(y){ $year.append('<option value="'+ y +'">'+ y +'</option>'); });
+            const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+            years.forEach(y => $year.append(`<option value="${y}">${y}</option>`));
             $year.val(String(currentYear));
         }
 
-        var avgChartInstance = null;
-        function loadAvgResolution(y){
-            MnmDashboardApi.fetchAvgResolutionMinutes(y).done(function(res){
+        let avgChartInstance = null;
+        const loadAvgResolution = (y) => {
+            MnmDashboardApi.fetchAvgResolutionMinutes(y).done(res => {
                 if (avgChartInstance) { avgChartInstance.destroy(); }
                 avgChartInstance = MnmDashboardCharts.renderAvgResolutionMinutes('avgResolutionChart', res.rows || []);
             });
-        }
+        };
 
         if ($year.length) {
-            $year.on('change', function(){ loadAvgResolution(Number($(this).val())); });
+            $year.on('change', () => loadAvgResolution(Number($year.val())));
             loadAvgResolution(currentYear);
         }
     });
