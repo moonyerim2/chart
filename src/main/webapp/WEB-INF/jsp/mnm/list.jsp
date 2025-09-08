@@ -94,19 +94,30 @@
       $.getJSON('<c:url value="/api/mnm"/>', params, function(res){
         $tbody.empty();
         res.rows.forEach(function(row){
-          const tr = $('<tr/>');
-          tr.append(`<td>${row.mnmId}</td><td>${row.title}</td><td>${row.status}</td><td>${row.regUser||''}</td><td>${row.regDate||''}</td>`);
-          tr.append(`<td class="text-end"><button class="btn btn-sm btn-outline-primary btn-edit" data-id="${row.mnmId}">수정</button> <button class="btn btn-sm btn-outline-danger btn-del" data-id="${row.mnmId}">삭제</button></td>`);
+          const tr = $('<tr/>' );
+          tr.append('<td>' + row.mnmId + '</td>'
+                    + '<td>' + row.title + '</td>'
+                    + '<td>' + row.status + '</td>'
+                    + '<td>' + (row.regUser || '') + '</td>'
+                    + '<td>' + (row.regDate || '') + '</td>');
+          tr.append('<td class="text-end">'
+                    + '<button class="btn btn-sm btn-outline-primary btn-edit" data-id="' + row.mnmId + '">수정</button> '
+                    + '<button class="btn btn-sm btn-outline-danger btn-del" data-id="' + row.mnmId + '">삭제</button>'
+                    + '</td>');
           $tbody.append(tr);
         });
         renderPager(res.page, Math.ceil(res.total/res.size));
+      }).fail(function(xhr){
+        console.error('목록 조회 실패', xhr.status, xhr.responseText);
+        $tbody.empty().append('<tr><td colspan="6" class="text-center text-muted">데이터를 불러오지 못했습니다.</td></tr>');
       });
     }
 
     function renderPager(page, total) {
       $pager.empty();
       for (let p = 1; p <= total; p++) {
-        const li = $(`<li class="page-item \${p===page?'active':''}"><a class="page-link" href="#">${p}</a></li>`);
+        const li = $('<li class="page-item"><a class="page-link" href="#">' + p + '</a></li>');
+        if (p === page) li.addClass('active');
         li.on('click', function(e){ e.preventDefault(); fetchList(p); });
         $pager.append(li);
       }
@@ -122,8 +133,11 @@
 
     $tbody.on('click', '.btn-edit', function(){
       const id = $(this).data('id');
-      $.getJSON(`<c:url value='/api/mnm'/>/${id}`, function(row){
-        for (const k in row) { $(`[name=${k}]`).val(row[k]); }
+      $.getJSON('<c:url value="/api/mnm"/>/' + id, function(row){
+        for (const k in row) {
+          const selector = '[name=' + k + ']';
+          $(selector).val(row[k]);
+        }
         modal.show();
       });
     });
@@ -133,7 +147,8 @@
       if (!data.title || data.title.length>100) return alert('제목은 100자 이내 필수입니다.');
       if (!data.content || data.content.length<500) return alert('내용은 500자 이상 필수입니다.');
       const method = data.mnmId ? 'PUT' : 'POST';
-      const url = data.mnmId ? `<c:url value='/api/mnm'/>/${data.mnmId}` : `<c:url value='/api/mnm'/>`;
+      const base = '<c:url value="/api/mnm"/>';
+      const url = data.mnmId ? (base + '/' + data.mnmId) : base;
       $.ajax({url, method, contentType:'application/json', data: JSON.stringify(data)})
         .done(function(){ modal.hide(); fetchList(1); })
         .fail(function(xhr){ alert(xhr.responseJSON?.message || '오류가 발생했습니다.'); });
@@ -142,8 +157,9 @@
     $tbody.on('click', '.btn-del', function(){
       if (!confirm('삭제하시겠습니까?')) return;
       const id = $(this).data('id');
-      $.ajax({url: `<c:url value='/api/mnm'/>/${id}`, method:'DELETE'})
-        .done(function(){ fetchList(1); });
+      $.ajax({url: '<c:url value="/api/mnm"/>/' + id, method:'DELETE'})
+        .done(function(){ fetchList(1); })
+        .fail(function(xhr){ alert('삭제 실패: ' + (xhr.responseJSON?.message || xhr.status)); });
     });
 
     fetchList(1);
