@@ -43,44 +43,7 @@
     </div>
 </div>
 
-<script>
-    (function waitForJQuery(){
-        if (!window.jQuery) { setTimeout(waitForJQuery, 50); return; }
-        jQuery(function($) {
-            const $spinner = $('#globalSpinner');
-            $spinner.show();
-
-            function toChartData(rows) {
-                return {
-                    labels: rows.map(r => r.label),
-                    datasets: [{ data: rows.map(r => r.value), backgroundColor: ['#ffc107','#0d6efd','#198754','#6610f2','#20c997','#fd7e14'] }]
-                };
-            }
-
-            $.getJSON('<c:url value="/api/charts/status"/>', function(res){
-                const total = res.rows.reduce((a,b)=>a + (Number(b.value)||0), 0);
-                new Chart(document.getElementById('statusChart'), {
-                    type: 'pie', data: toChartData(res.rows), options: { plugins: { legend: { position: 'bottom' } } }
-                });
-                $('#statusTotal').text(`총 ${total}건`);
-            }).always(()=> $spinner.hide());
-
-            $.getJSON('<c:url value="/api/charts/monthly"/>', function(res){
-                new Chart(document.getElementById('monthlyChart'), {
-                    type: 'line', data: { labels: res.rows.map(r=>r.label), datasets: [{ label:'등록', data: res.rows.map(r=>r.value), borderColor:'#0d6efd', fill:false }] },
-                    options: { plugins: { legend: { display: false } } }
-                });
-            });
-
-            $.getJSON('<c:url value="/api/charts/users"/>', function(res){
-                new Chart(document.getElementById('userChart'), {
-                    type: 'bar', data: { labels: res.rows.map(r=>r.label), datasets: [{ label:'등록 수', data: res.rows.map(r=>r.value), backgroundColor: '#20c997' }] },
-                    options: { plugins: { legend: { display: false } } }
-                });
-            });
-        });
-    })();
-</script>
+<script src="<c:url value='/resources/js/mnm.dashboard.js'/>"></script>
 
 <jsp:include page="/WEB-INF/jsp/include/footer.jsp"/>
 
