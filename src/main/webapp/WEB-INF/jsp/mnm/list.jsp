@@ -106,7 +106,7 @@
     function renderPager(page, total) {
       $pager.empty();
       for (let p = 1; p <= total; p++) {
-        const li = $(`<li class="page-item ${p===page?'active':''}"><a class="page-link" href="#">${p}</a></li>`);
+        const li = $(`<li class="page-item \${p===page?'active':''}"><a class="page-link" href="#">${p}</a></li>`);
         li.on('click', function(e){ e.preventDefault(); fetchList(p); });
         $pager.append(li);
       }
