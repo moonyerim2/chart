@@ -43,7 +43,9 @@
     </div>
 </div>
 
-<script src="<c:url value='/resources/js/mnm.dashboard.js'/>"></script>
+<script src="<c:url value='/resources/js/mnm.dashboard.api.js'/>"></script>
+<script src="<c:url value='/resources/js/mnm.dashboard.charts.js'/>"></script>
+<script src="<c:url value='/resources/js/mnm.dashboard.init.js'/>"></script>
 
 <jsp:include page="/WEB-INF/jsp/include/footer.jsp"/>
 
