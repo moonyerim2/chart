@@ -55,6 +55,19 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6 col-lg-8">
+      <div class="card h-100">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <span>월별 평균 처리시간(분)</span>
+          <select id="avgYearSelect" class="form-select form-select-sm" style="width:auto">
+          </select>
+        </div>
+        <div class="card-body">
+          <canvas id="avgResolutionChart" height="220"></canvas>
+        </div>
+      </div>
+  </div>
 </div>
 
 <script src="<c:url value='/resources/js/mnm.dashboard.api.js'/>"></script>

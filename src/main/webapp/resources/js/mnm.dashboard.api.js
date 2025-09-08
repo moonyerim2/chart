@@ -5,15 +5,16 @@
         return base;
     }
 
-    function fetchJson(path){
-        return jQuery.getJSON(getBaseUrl() + path);
+    function fetchJson(path, params){
+        return jQuery.getJSON(getBaseUrl() + path, params);
     }
 
     var api = {
         fetchStatus: function(){ return fetchJson('/api/charts/status'); },
         fetchMonthly: function(){ return fetchJson('/api/charts/monthly'); },
         fetchUsers: function(){ return fetchJson('/api/charts/users'); },
-        fetchResolutionRate: function(){ return fetchJson('/api/charts/resolutionRate'); }
+        fetchResolutionRate: function(){ return fetchJson('/api/charts/resolutionRate'); },
+        fetchAvgResolutionMinutes: function(year){ return fetchJson('/api/charts/avgResolutionMinutes', year ? { year: year } : undefined); }
     };
 
     global.MnmDashboardApi = api;

@@ -45,6 +45,13 @@ public class ChartApiController {
         return data; // Directly return the map for resolution rate
     }
 
+    @GetMapping("/avgResolutionMinutes")
+    public Map<String, Object> avgResolutionMinutes(@RequestParam(required = false) Integer year) {
+        int y = (year == null) ? LocalDate.now().getYear() : year;
+        List<Map<String, Object>> rows = mnmDAO.monthlyAvgResolutionMinutes(y);
+        return wrap(rows);
+    }
+
     @GetMapping("/ping")
     public Map<String, String> ping() {
         return java.util.Map.of("ok", "true");

@@ -28,6 +28,7 @@ public interface MnmDAO {
     List<java.util.Map<String, Object>> monthlyCounts(@Param("year") int year);
     List<java.util.Map<String, Object>> countByUser();
     java.util.Map<String, Object> selectResolutionRate();
+    List<java.util.Map<String, Object>> monthlyAvgResolutionMinutes(@Param("year") int year);
 }
 
 

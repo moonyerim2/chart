@@ -87,6 +87,17 @@
             SUM(CASE WHEN status IN ('완료','COMPLETED') THEN 1 ELSE 0 END) AS completed
         FROM tb_mnm
     </select>
+
+    <!-- Monthly average resolution time (minutes) for completed cases) -->
+    <select id="monthlyAvgResolutionMinutes" resultType="map">
+        SELECT DATE_FORMAT(reg_date, '%m') AS label,
+               AVG(TIMESTAMPDIFF(MINUTE, reg_date, upd_date)) AS value
+        FROM tb_mnm
+        WHERE status IN ('완료','COMPLETED')
+          AND YEAR(reg_date) = #{year}
+        GROUP BY DATE_FORMAT(reg_date, '%m')
+        ORDER BY label
+    </select>
 </mapper>
 
 

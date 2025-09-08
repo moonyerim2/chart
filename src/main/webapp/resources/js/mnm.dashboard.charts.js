@@ -65,6 +65,20 @@
                     }
                 }
             });
+        },
+        renderAvgResolutionMinutes: function(containerId, rows){
+            return new Chart(document.getElementById(containerId), {
+                type: 'bar',
+                data: {
+                  labels: (rows || []).map(function(r){ return r.label; }),
+                  datasets: [{
+                    label:'평균 처리시간(분)',
+                    data: (rows||[]).map(r => Number(r.value)||0),
+                    backgroundColor: '#6610f2' 
+                  }]
+                },
+                options: { plugins: { legend: { display: false } } }
+            });
         }
     };
 

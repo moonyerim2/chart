@@ -26,6 +26,28 @@
             MnmDashboardCharts.renderResolutionRate('resolutionRateChart', total, completed);
             $('#resolutionRateText').text(percentage.toFixed(1) + '%');
         });
+
+        // 월별 평균 처리시간(분) - 연도 선택 및 로딩
+        var currentYear = new Date().getFullYear();
+        var $year = $('#avgYearSelect');
+        if ($year.length) {
+            var years = Array.from({ length: 5 }, function(_, i){ return currentYear - i; });
+            years.forEach(function(y){ $year.append('<option value="'+ y +'">'+ y +'</option>'); });
+            $year.val(String(currentYear));
+        }
+
+        var avgChartInstance = null;
+        function loadAvgResolution(y){
+            MnmDashboardApi.fetchAvgResolutionMinutes(y).done(function(res){
+                if (avgChartInstance) { avgChartInstance.destroy(); }
+                avgChartInstance = MnmDashboardCharts.renderAvgResolutionMinutes('avgResolutionChart', res.rows || []);
+            });
+        }
+
+        if ($year.length) {
+            $year.on('change', function(){ loadAvgResolution(Number($(this).val())); });
+            loadAvgResolution(currentYear);
+        }
     });
 })();
 
