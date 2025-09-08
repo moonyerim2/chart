@@ -36,6 +36,35 @@
                 },
                 options: { plugins: { legend: { display: false } } }
             });
+        },
+        renderResolutionRate: function(containerId, total, completed) {
+            var percentage = (total > 0) ? (completed / total * 100) : 0;
+            return new Chart(document.getElementById(containerId), {
+                type: 'doughnut',
+                data: {
+                    labels: ['완료', '미완료'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#198754', '#dee2e6'], // Green for completed, light grey for remaining
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    rotation: -90, // Start from the left
+                    circumference: 180, // Half circle
+                    cutout: '80%',
+                    plugins: {
+                        tooltip: { enabled: false },
+                        legend: { display: false }
+                    },
+                    elements: {
+                        arc: {
+                            borderRadius: 5,
+                            borderAlign: 'inner'
+                        }
+                    }
+                }
+            });
         }
     };
 

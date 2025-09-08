@@ -52,6 +52,11 @@ public class MnmServiceImpl implements MnmService {
         return mnmDAO.deleteMnm(mnmId);
     }
 
+    @Override
+    public java.util.Map<String, Object> selectResolutionRate() {
+        return mnmDAO.selectResolutionRate();
+    }
+
     private void validate(MnmVO vo, boolean isCreate) {
         if (!StringUtils.hasText(vo.getTitle()) || vo.getTitle().length() > 100) {
             throw new IllegalArgumentException("제목은 필수이며 100자 이내여야 합니다.");

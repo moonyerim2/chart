@@ -41,6 +41,20 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">민원 처리율</div>
+            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                <div style="position: relative; width: 100%; max-width: 220px;">
+                    <canvas id="resolutionRateChart" height="110"></canvas>
+                    <div style="position: absolute; top: 70%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: bold;">
+                        <span id="resolutionRateText" class="text-primary">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="<c:url value='/resources/js/mnm.dashboard.api.js'/>"></script>

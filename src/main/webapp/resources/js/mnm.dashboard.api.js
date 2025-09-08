@@ -12,7 +12,8 @@
     var api = {
         fetchStatus: function(){ return fetchJson('/api/charts/status'); },
         fetchMonthly: function(){ return fetchJson('/api/charts/monthly'); },
-        fetchUsers: function(){ return fetchJson('/api/charts/users'); }
+        fetchUsers: function(){ return fetchJson('/api/charts/users'); },
+        fetchResolutionRate: function(){ return fetchJson('/api/charts/resolutionRate'); }
     };
 
     global.MnmDashboardApi = api;

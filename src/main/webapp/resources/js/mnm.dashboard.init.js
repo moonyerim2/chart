@@ -18,6 +18,14 @@
         MnmDashboardApi.fetchUsers().done(function(res){
             MnmDashboardCharts.renderUsers('userChart', res.rows || []);
         });
+
+        MnmDashboardApi.fetchResolutionRate().done(function(res){
+            var total = Number(res.total) || 0;
+            var completed = Number(res.completed) || 0;
+            var percentage = (total > 0) ? (completed / total * 100) : 0;
+            MnmDashboardCharts.renderResolutionRate('resolutionRateChart', total, completed);
+            $('#resolutionRateText').text(percentage.toFixed(1) + '%');
+        });
     });
 })();
 

@@ -79,6 +79,14 @@
         ORDER BY value DESC
         LIMIT 10
     </select>
+
+    <!-- Resolution Rate -->
+    <select id="selectResolutionRate" resultType="map">
+        SELECT
+            COUNT(*) AS total,
+            SUM(CASE WHEN status IN ('완료','COMPLETED') THEN 1 ELSE 0 END) AS completed
+        FROM tb_mnm
+    </select>
 </mapper>
 
 

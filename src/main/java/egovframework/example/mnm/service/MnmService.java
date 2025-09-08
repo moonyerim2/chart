@@ -10,6 +10,7 @@ public interface MnmService {
     int insertMnm(MnmVO vo);
     int updateMnm(MnmVO vo);
     int deleteMnm(int mnmId);
+    java.util.Map<String, Object> selectResolutionRate();
 }
 
 

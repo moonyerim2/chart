@@ -39,6 +39,12 @@ public class ChartApiController {
         return wrap(rows);
     }
 
+    @GetMapping("/resolutionRate")
+    public Map<String, Object> resolutionRateChart() {
+        Map<String, Object> data = mnmDAO.selectResolutionRate();
+        return data; // Directly return the map for resolution rate
+    }
+
     @GetMapping("/ping")
     public Map<String, String> ping() {
         return java.util.Map.of("ok", "true");
