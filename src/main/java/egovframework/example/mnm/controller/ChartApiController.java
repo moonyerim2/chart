@@ -39,6 +39,11 @@ public class ChartApiController {
         return wrap(rows);
     }
 
+    @GetMapping("/ping")
+    public Map<String, String> ping() {
+        return java.util.Map.of("ok", "true");
+    }
+
     private Map<String, Object> wrap(List<Map<String, Object>> rows) {
         Map<String, Object> res = new HashMap<>();
         res.put("rows", rows);
